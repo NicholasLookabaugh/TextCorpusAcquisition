@@ -1,12 +1,18 @@
 package WindowsApp;
 
 import java.awt.EventQueue;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import TextCorpusAquisition.HTMLExtraction;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import GoogleSearch.GoogleCustomSearch;
 public class CrawlerApp {
 
@@ -44,12 +50,28 @@ public class CrawlerApp {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Text Corpus Acquisition");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JButton btnNewButton = new JButton("New button");
-		frame.getContentPane().add(btnNewButton, BorderLayout.EAST);
+		JPanel mainPanel =  new JPanel();
+		JButton crawlButton = new JButton("Crawl");
+		crawlButton.setPreferredSize(new Dimension(75,75));
+		JTextField inputText = new JTextField();
+		inputText.setPreferredSize(new Dimension(350,50));
+		mainPanel.add(inputText);
+		mainPanel.add(crawlButton);
+		
+		frame.getContentPane().add(mainPanel);
+		
+		crawlButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  //GoogleCustomSearch crawl = new GoogleCustomSearch();
+			  //crawl.search(inputText.getText());
+		  }
+		});
 	}
 
 }
