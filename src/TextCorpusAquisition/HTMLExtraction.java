@@ -1,7 +1,9 @@
 package TextCorpusAquisition;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -75,6 +77,18 @@ public class HTMLExtraction {
 		      for (Element paragraph : paragraphs) {
 		         System.out.println(paragraph.text());
 		      }
+		      //Downloading the html file
+			  /*final File f = new File("test.html");
+			      
+			  try 
+			  {
+				  FileUtils.writeStringToFile(f, htmlDoc.outerHtml());
+			  } 
+			  catch (IOException e) 
+			  {
+				  // TODO Auto-generated catch block
+				  e.printStackTrace();
+			  }*/
 		}
 		public String getTitle(){
 			

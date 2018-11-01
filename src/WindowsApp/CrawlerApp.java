@@ -69,8 +69,8 @@ public class CrawlerApp {
 		{
 		  public void actionPerformed(ActionEvent e)
 		  {
-			  //GoogleCustomSearch crawl = new GoogleCustomSearch();
-			  //crawl.search(inputText.getText());
+			  GoogleCustomSearch crawl = new GoogleCustomSearch();
+			  crawl.search(inputText.getText());
 		  }
 		});
 	}
