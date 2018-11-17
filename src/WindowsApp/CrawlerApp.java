@@ -1,18 +1,13 @@
 package WindowsApp;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
@@ -64,7 +59,7 @@ public class CrawlerApp {
 		JTextField searchTerm = new JTextField();
 		searchTerm.setBounds(150, 75, 300, 50);
 		
-		MySearchAmountField searchAmount = new MySearchAmountField();
+		JTextField searchAmount = new JTextField();
 		searchAmount.setBounds(500, 75, 150, 50);
 		
 		JTextField searchText = new JTextField("Enter your search term");
@@ -94,7 +89,7 @@ public class CrawlerApp {
 					  Integer.parseInt(searchAmount.getText());
 					  //GoogleCustomSearch crawl = new GoogleCustomSearch();
 					  //crawl.search(searchTerm.getText());
-					  System.out.println(searchAmount.getIntValue());
+					  System.out.println(searchAmount.getText());
 				  }
 				  catch (NumberFormatException f)
 				  {
@@ -108,17 +103,4 @@ public class CrawlerApp {
 		  }
 		});
 	}
-}
-
-class MySearchAmountField extends JTextField
-{
-	private static final long serialVersionUID = 1L;
-	public void setIntValue(int x)
-    {
-        setText(""+x);
-    }
-    public int getIntValue()
-    {
-        return Integer.parseInt(getText());
-    }
 }
