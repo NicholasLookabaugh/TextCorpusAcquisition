@@ -1,10 +1,9 @@
 package TextCorpusAquisition;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -91,6 +90,20 @@ public class HTMLExtraction {
 			for (int counter = 0; counter < list.size(); counter++) { 		      
 		          extract(list.get(counter)); 		
 		      } 
+
+		      //Downloading the html file
+			  /*final File f = new File("test.html");
+			      
+			  try 
+			  {
+				  FileUtils.writeStringToFile(f, htmlDoc.outerHtml());
+			  } 
+			  catch (IOException e) 
+			  {
+				  // TODO Auto-generated catch block
+				  e.printStackTrace();
+			  }*/
+
 		}
 		public String getTitle(){
 			

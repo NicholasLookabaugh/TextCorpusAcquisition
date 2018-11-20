@@ -6,16 +6,22 @@ import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.*;
+import java.util.ArrayList;
+
 import org.jsoup.nodes.Element;
 
 
+
+import TextCorpusAquisition.HTMLExtraction;
 
 public class GoogleCustomSearch {
 
 	public ArrayList<String> search(String term) {
 		String query = term;
+		
 		ArrayList<String> links =new ArrayList<String>();
 		int searchNum = 20;
 		final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
@@ -29,11 +35,14 @@ public class GoogleCustomSearch {
 				String linkHref = result.attr("href");
 				links.add(linkHref.substring(7, linkHref.indexOf("&")));
 			}
-				
+
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+
 		}
 		return links;
+
 	}
 
 }
