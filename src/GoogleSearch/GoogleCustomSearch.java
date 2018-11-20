@@ -1,35 +1,39 @@
 package GoogleSearch;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import java.util.*;
+import org.jsoup.nodes.Element;
+
+
 
 public class GoogleCustomSearch {
 
-	public void search(String term) {
+	public ArrayList<String> search(String term) {
 		String query = term;
-		String encoding = "UTF-8";
+		ArrayList<String> links =new ArrayList<String>();
+		int searchNum = 20;
+		final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
 		try {
-			
-			Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(term, encoding)).userAgent("Mozilla/5.0").get();  
-			
-			   Elements webSitesLinks = google.getElementsByTag("cite");
-				
-				//Check if any results found
-				if (webSitesLinks.isEmpty()) {
-					System.out.println("No results found");
-					return;
-				}
-				
-				webSitesLinks.forEach(link->System.out.println(link.text()));
+			  
+			String searchURL = GOOGLE_SEARCH_URL + "?q="+query+"&num="+ searchNum;
+			Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").get();
+			Elements results = doc.select("h3.r > a");
+
+			for (Element result : results) {
+				String linkHref = result.attr("href");
+				links.add(linkHref.substring(7, linkHref.indexOf("&")));
+			}
 				
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		return links;
 	}
 
-	
 }

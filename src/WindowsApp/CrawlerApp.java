@@ -14,19 +14,23 @@ import javax.swing.JButton;
 
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
-
+import java.util.*;
 public class CrawlerApp {
 
 	private JFrame frame;
-
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		//ArrayList<String> links =new ArrayList<String>();
 		//HTMLExtraction x = new HTMLExtraction();
 		//GoogleCustomSearch y = new GoogleCustomSearch();
-		//y.search("freedom");
-		//x.extract("https://money.cnn.com/2015/07/27/technology/android-text-hack/index.html");
+		//links = y.search("freedom as a concept");
+		//x.extractMetaList(links);
+	    //System.out.println(Arrays.toString(links.toArray()));
+	    //x.getMetaData("https://en.wikipedia.org/wiki/Paul_Revere");
+		//x.extractList(links);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
