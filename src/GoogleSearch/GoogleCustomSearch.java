@@ -19,11 +19,11 @@ import TextCorpusAquisition.HTMLExtraction;
 
 public class GoogleCustomSearch {
 
-	public ArrayList<String> search(String term) {
+	public ArrayList<String> search(String term, int amount) {
 		String query = term;
 		
 		ArrayList<String> links =new ArrayList<String>();
-		int searchNum = 20;
+		int searchNum = amount;
 		final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
 		try {
 			  

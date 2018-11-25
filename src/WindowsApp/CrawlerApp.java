@@ -15,17 +15,18 @@ import java.util.*;
 public class CrawlerApp {
 
 	private JFrame frame;
-	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		ArrayList<String> links =new ArrayList<String>();
+			//Random stuff for testing purposes
+		//ArrayList<String> links = new ArrayList<String>();
 		//HTMLExtraction x = new HTMLExtraction();
-		GoogleCustomSearch y = new GoogleCustomSearch();
-		links = y.search("freedom as a concept");
+		//x.extract("https://en.wikipedia.org/wiki/Paul_Revere");
+		//GoogleCustomSearch y = new GoogleCustomSearch();
+		//links = y.search("freedom as a concept", 1);
 		//x.extractMetaList(links);
-	    System.out.println(Arrays.toString(links.toArray()));
+	    //System.out.println(Arrays.toString(links.toArray()));
 	    //x.getMetaData("https://en.wikipedia.org/wiki/Paul_Revere");
 		//x.extractList(links);
 		EventQueue.invokeLater(new Runnable() {
@@ -90,10 +91,16 @@ public class CrawlerApp {
 			  {
 				  try
 				  {
+					  ArrayList<String> links = new ArrayList<String>();
 					  Integer.parseInt(searchAmount.getText());
-					  //GoogleCustomSearch crawl = new GoogleCustomSearch();
-					  //crawl.search(searchTerm.getText());
-					  System.out.println(searchAmount.getText());
+					  GoogleCustomSearch crawler = new GoogleCustomSearch();
+					  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
+					  HTMLExtraction extractor = new HTMLExtraction();
+					  System.out.println(Arrays.toString(links.toArray()));
+					  for (String link : links)
+					  {
+						  extractor.extract(link);
+					  }
 				  }
 				  catch (NumberFormatException f)
 				  {

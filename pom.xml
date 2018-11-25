@@ -22,6 +22,11 @@
     <artifactId>commons-io</artifactId>
     <version>1.3.2</version>
 </dependency>
+<dependency>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>mssql-jdbc</artifactId>
+    <version>7.0.0.jre10</version>
+</dependency>
 </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
