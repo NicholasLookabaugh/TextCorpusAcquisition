@@ -17,6 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import XmlMaker.XmlMaker;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -28,14 +30,16 @@ public class HTMLExtraction {
 	private Document htmlDoc;
 	private Element body;
 	private Elements paragraph;
-	private String searchPhrase;
+	private String searchTerm;
 	private int wordCount;
 	private String dateTime;
 	
 	private static AtomicInteger pKey = new AtomicInteger(0);
 
 	
-		public HTMLExtraction(){
+		public HTMLExtraction(String searchTerm)
+		{
+			this.searchTerm = searchTerm;
 		}
 		
 				//Connect to web page and extract HTML
@@ -56,10 +60,13 @@ public class HTMLExtraction {
 			try {
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0").get();
 				String title = doc.title();
-	            System.out.println(title);
-				/*for(Element meta : doc.select("meta")) {
-					System.out.println("Name: " + meta.attr("name") + " - Content: " + meta.attr("content"));
-				}*/
+	            String timeAccessed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+	            String link = url;
+	            String searchTerm = this.getSearchTerm();
+	            XmlMaker xml = new XmlMaker(title, timeAccessed, link, searchTerm);
+				//for(Element meta : doc.select("meta")) {
+					//System.out.println("Name: " + meta.attr("name") + " - Content: " + meta.attr("content"));
+				//}
 			}
 			catch(Exception e) {
 				System.out.println("Error");
@@ -108,8 +115,8 @@ public class HTMLExtraction {
 		    	  wordCount++;
 		      }
 		      setWordCount(wordCount);
-		      
-		      SqlTest();
+		      getMetaData(url1);
+		      //SqlTest();
 			}
 			catch(Exception e) {
 				System.out.println("Error");
@@ -182,15 +189,15 @@ public class HTMLExtraction {
 			return this.dateTime;
 		}
 		
-		public void setSearchPhrase(String searchPhrase)
+		public void setSearchTerm(String searchPhrase)
 		{
-			this.searchPhrase = searchPhrase;
+			this.searchTerm = searchTerm;
 		}
 		
-		public String getSearchPhrase()
+		public String getSearchTerm()
 		{
-			searchPhrase = "Web crawler";
-			return this.searchPhrase;
+			searchTerm = "Web crawler";
+			return this.searchTerm;
 		}
 		
 		public String getUrl(){
@@ -225,7 +232,7 @@ public class HTMLExtraction {
 		    try (Connection conn = DriverManager.getConnection(connectionUrl); Statement st = conn.createStatement();) 
 		    {
 		    	getNextpKey();
-		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchPhrase() + "', '" + getUrl() + "', '" + getTitle() + "', '" + getDateTime() + "', " + getWordCount() + ");");
+		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', '" + getTitle() + "', '" + getDateTime() + "', " + getWordCount() + ");");
 		        st.executeUpdate(SQL_WebPageInfo);
 
     			//Fix the closing ' for SQL insert
