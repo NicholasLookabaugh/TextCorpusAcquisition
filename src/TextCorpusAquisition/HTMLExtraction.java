@@ -1,12 +1,10 @@
 package TextCorpusAquisition;
 
-import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -17,8 +15,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import XmlMaker.XmlMaker;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -28,7 +24,6 @@ public class HTMLExtraction {
 	private String url;
 	private String title;
 	private Document htmlDoc;
-	private Element body;
 	private Elements paragraph;
 	private String searchTerm;
 	private int wordCount;
@@ -39,7 +34,7 @@ public class HTMLExtraction {
 	
 		public HTMLExtraction(String searchTerm)
 		{
-			this.searchTerm = searchTerm;
+			this.setSearchTerm(searchTerm);
 		}
 		
 				//Connect to web page and extract HTML
@@ -48,8 +43,7 @@ public class HTMLExtraction {
 			try {
 				htmlDoc = Jsoup.connect(url).get();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Connection Error");
 			}
 			
 			return htmlDoc;
@@ -63,7 +57,7 @@ public class HTMLExtraction {
 	            String timeAccessed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 	            String link = url;
 	            String searchTerm = this.getSearchTerm();
-	            XmlMaker xml = new XmlMaker(title, timeAccessed, link, searchTerm);
+	            this.makeXml(title, timeAccessed, link, searchTerm);
 				//for(Element meta : doc.select("meta")) {
 					//System.out.println("Name: " + meta.attr("name") + " - Content: " + meta.attr("content"));
 				//}
@@ -119,7 +113,7 @@ public class HTMLExtraction {
 		      //SqlTest();
 			}
 			catch(Exception e) {
-				System.out.println("Error");
+				System.out.println("Extraction Error");
 			}
 
 		}
@@ -189,7 +183,7 @@ public class HTMLExtraction {
 			return this.dateTime;
 		}
 		
-		public void setSearchTerm(String searchPhrase)
+		public void setSearchTerm(String searchTerm)
 		{
 			this.searchTerm = searchTerm;
 		}
@@ -256,5 +250,28 @@ public class HTMLExtraction {
 		        e.printStackTrace();
 		    }
 
+		}
+		
+		public void makeXml(String title, String timeAccessed, String link, String searchTerm)
+		{
+			String exportXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			exportXml += "<Website>\n";
+			exportXml += " <Title>" + title + "</Title>\n";
+			exportXml += " <TimeAccessed>" + timeAccessed + "</TimeAccessed>\n";
+			exportXml += " <Link>" + link + "</Link>\n";
+			exportXml += " <SearchTerm>" + searchTerm + "</SearchTerm>\n";
+			exportXml += "</Website>";
+			
+				// Writes to a xml file named the same as the title of the article
+			BufferedWriter writer;
+			try {
+				writer = new BufferedWriter(new FileWriter(this.getTitle() + ".xml"));
+				writer.write(exportXml);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			System.out.println(exportXml);
 		}
 	}

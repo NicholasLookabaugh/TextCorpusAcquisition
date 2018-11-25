@@ -1,21 +1,12 @@
 package GoogleSearch;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.util.*;
 import java.util.ArrayList;
 
-import org.jsoup.nodes.Element;
-
-
-
-import TextCorpusAquisition.HTMLExtraction;
 
 public class GoogleCustomSearch {
 

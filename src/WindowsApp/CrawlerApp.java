@@ -11,7 +11,6 @@ import javax.swing.JButton;
 
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
-import XmlMaker.XmlMaker;
 import java.util.*;
 public class CrawlerApp {
 
@@ -93,12 +92,18 @@ public class CrawlerApp {
 			  {
 				  try
 				  {
-					  ArrayList<String> links = new ArrayList<String>();
+					  	// This is ran to make the error of the search amount sooner than later in the code
 					  Integer.parseInt(searchAmount.getText());
+					  
+					  ArrayList<String> links = new ArrayList<String>();
+					  
+					  	// This section generates the list of links
 					  GoogleCustomSearch crawler = new GoogleCustomSearch();
 					  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
-					  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
 					  System.out.println(Arrays.toString(links.toArray()));
+					  
+					  	// This section of code uses the list of links to extract the html and xml
+					  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
 					  for (String link : links)
 					  {
 						  extractor.extract(link);
