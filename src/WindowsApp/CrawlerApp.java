@@ -3,15 +3,14 @@ package WindowsApp;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
 import java.util.*;
+
 public class CrawlerApp {
 
 	private JFrame frame;
