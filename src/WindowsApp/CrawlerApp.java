@@ -11,6 +11,7 @@ import javax.swing.JButton;
 
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
+import XmlMaker.XmlMaker;
 import java.util.*;
 public class CrawlerApp {
 
@@ -29,6 +30,7 @@ public class CrawlerApp {
 	    //System.out.println(Arrays.toString(links.toArray()));
 	    //x.getMetaData("https://en.wikipedia.org/wiki/Paul_Revere");
 		//x.extractList(links);
+		XmlMaker test = new XmlMaker("title", "timeAccessed", "link", "searchTerm");
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

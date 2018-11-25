@@ -1,5 +1,9 @@
 package XmlMaker;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class XmlMaker {
 	private String title;
 	private String timeAccessed;
@@ -57,6 +61,23 @@ public class XmlMaker {
 	
 	public void makeXml()
 	{
+		String exportXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		exportXml += "<Website>\n";
+		exportXml += " <Title>" + this.getTitle() + "</Title>\n";
+		exportXml += " <TimeAccessed>" + this.getTimeAccessed() + "</TimeAccessed>\n";
+		exportXml += " <Link>" + this.getLink() + "</Link>\n";
+		exportXml += " <SearchTerm>" + this.getSearchTerm() + "</SearchTerm>\n";
+		exportXml += "</Website>";
 		
+			// Writes to a xml file named the same as the title of the article
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(this.getTitle() + ".xml"));
+			writer.write(exportXml);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(exportXml);
 	}
 }
