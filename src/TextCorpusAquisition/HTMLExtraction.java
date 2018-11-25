@@ -269,7 +269,5 @@ public class HTMLExtraction {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println(exportXml);
 		}
 	}
