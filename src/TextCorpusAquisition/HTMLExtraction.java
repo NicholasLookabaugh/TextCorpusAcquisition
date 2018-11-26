@@ -1,6 +1,7 @@
 package TextCorpusAquisition;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,6 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -107,6 +110,8 @@ public class HTMLExtraction {
 		    	  wordCount++;
 		      }
 		      setWordCount(wordCount);
+		      extractHtml();
+		      extractText();
 		      getMetaData(url1);
 		      //SqlTest();
 			}
@@ -115,13 +120,11 @@ public class HTMLExtraction {
 			}
 
 		}
-		public void extractList(ArrayList<String> list) {
-			for (int counter = 0; counter < list.size(); counter++) { 		      
-		          extract(list.get(counter)); 		
-		      } 
-
-		      //Downloading the html file
-			  /*final File f = new File("test.html");
+		
+		public void extractHtml()
+		{
+			//Extracting the HTML
+			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".html");
 			      
 			  try 
 			  {
@@ -129,11 +132,15 @@ public class HTMLExtraction {
 			  } 
 			  catch (IOException e) 
 			  {
-				  // TODO Auto-generated catch block
 				  e.printStackTrace();
-			  }*/
-
+			  }
 		}
+		
+		public void extractText() 
+		{
+			
+		}
+		
 		public void setHTMLDoc(Document htmlDoc)
 		{
 			this.htmlDoc = htmlDoc;
@@ -188,7 +195,6 @@ public class HTMLExtraction {
 		
 		public String getSearchTerm()
 		{
-			searchTerm = "Web crawler";
 			return this.searchTerm;
 		}
 		
@@ -260,14 +266,16 @@ public class HTMLExtraction {
 			exportXml += " <SearchTerm>" + searchTerm + "</SearchTerm>\n";
 			exportXml += "</Website>";
 			
-				// Writes to a xml file named the same as the title of the article
-			BufferedWriter writer;
-			try {
-				writer = new BufferedWriter(new FileWriter(this.getTitle() + ".xml"));
-				writer.write(exportXml);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				// Writes to a xml file named the same as the pKey
+			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".xml");
+		      
+			  try 
+			  {
+				  FileUtils.writeStringToFile(f, exportXml);
+			  } 
+			  catch (IOException e) 
+			  {
+				  e.printStackTrace();
+			  }
 		}
 	}
