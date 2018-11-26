@@ -10,10 +10,12 @@ import javax.swing.JButton;
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CrawlerApp {
 
 	private JFrame frame;
+	private static AtomicInteger pKey = new AtomicInteger(0);
 	/**
 	 * Launch the application.
 	 */
@@ -100,12 +102,12 @@ public class CrawlerApp {
 					  GoogleCustomSearch crawler = new GoogleCustomSearch();
 					  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
 					  System.out.println(Arrays.toString(links.toArray()));
-					  
+
 					  	// This section of code uses the list of links to extract the html and xml
 					  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
 					  for (String link : links)
 					  {
-						  extractor.extract(link);
+						  extractor.extract(link, pKey.incrementAndGet());
 					  }
 				  }
 				  catch (NumberFormatException f)
@@ -121,4 +123,8 @@ public class CrawlerApp {
 		});
 	}
 
+	public int getNextpKey()
+	{
+		return pKey.incrementAndGet();
+	}
 }

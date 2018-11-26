@@ -30,7 +30,7 @@ public class HTMLExtraction {
 	private int wordCount;
 	private String dateTime;
 	
-	private static AtomicInteger pKey = new AtomicInteger(0);
+	private static int pKey;
 
 	
 		public HTMLExtraction(String searchTerm)
@@ -74,11 +74,11 @@ public class HTMLExtraction {
 		}
 		
 		
-		public void extract(String url1) {
+		public void extract(String url1, int pKey) {
 			try {
-			//URL to test
-		      String url = url1;   
-		      setUrl(url);
+			//URL to test 
+		      setUrl(url1);
+		      setPKey(pKey);
 		      
 		      		// Date and time of connection
 		      String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -217,10 +217,15 @@ public class HTMLExtraction {
 		{
 			return this.wordCount;
 		}
-
-		public int getNextpKey()
+		
+		public void setPKey(int pKey)
 		{
-			return pKey.incrementAndGet();
+			this.pKey = pKey;
+		}
+
+		public int getPKey()
+		{
+			return this.pKey;
 		}
 		
 		public void SqlTest()
@@ -229,7 +234,6 @@ public class HTMLExtraction {
 
 		    try (Connection conn = DriverManager.getConnection(connectionUrl); Statement st = conn.createStatement();) 
 		    {
-		    	getNextpKey();
 		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', '" + getTitle() + "', '" + getDateTime() + "', " + getWordCount() + ");");
 		        st.executeUpdate(SQL_WebPageInfo);
 
