@@ -1,22 +1,19 @@
 package TextCorpusAquisition;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 
+import java.text.SimpleDateFormat;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,8 +26,13 @@ public class HTMLExtraction {
 	private String searchTerm;
 	private int wordCount;
 	private String dateTime;
+	private int pKey;
 	
-	private static int pKey;
+    private final String username = "TextCorpusProgram";
+    private final String password = "Pa$$word!";
+    private final String connectionUrl = "jdbc:sqlserver://";
+    private final String serverName = "192.168.1.57\\NGL4";
+    private final String databaseName = "TextCorpusData";
 
 	
 		public HTMLExtraction(String searchTerm)
@@ -84,9 +86,7 @@ public class HTMLExtraction {
 		      String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 		      setDateTime(dateTime);
 		      		//Document with HTML
-		      Document htmlDoc = Jsoup.connect(url)
-		              .userAgent("Mozilla")
-		              .timeout(0).get();
+		      Document htmlDoc = Jsoup.connect(url).userAgent("Mozilla").timeout(0).get();
 
 		      setHTMLDoc(htmlDoc);
 		      		//web page title
@@ -113,7 +113,7 @@ public class HTMLExtraction {
 		      extractHtml();
 		      extractText();
 		      getMetaData(url1);
-		      //SqlTest();
+		      SqlTest();
 			}
 			catch(Exception e) {
 				System.out.println("Extraction Error");
@@ -228,12 +228,17 @@ public class HTMLExtraction {
 			return this.pKey;
 		}
 		
+		private String getConnectionUrl()
+		{
+			return connectionUrl + serverName + ";DatabaseName=" + databaseName;
+		}
+		
 		public void SqlTest()
 		{
-		    String connectionUrl = ("jdbc:sqlserver://98.170.196.192:49170;databaseName=TextCorpusData;user=TextCorpusProgram;password=Pa$$word!");
-
-		    try (Connection conn = DriverManager.getConnection(connectionUrl); Statement st = conn.createStatement();) 
+		    try
 		    {
+		    	Connection conn = DriverManager.getConnection(getConnectionUrl(), username, password);
+		    	Statement st = conn.createStatement();
 		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', '" + getTitle() + "', '" + getDateTime() + "', " + getWordCount() + ");");
 		        st.executeUpdate(SQL_WebPageInfo);
 
@@ -255,7 +260,12 @@ public class HTMLExtraction {
 		    // Handle any errors that may have occurred.
 		    catch (SQLException e) 
 		    {
+		        System.out.println("Error in connecting to the Sql Server");
 		        e.printStackTrace();
+		    }
+		    catch(Exception e)
+		    {
+		    	e.printStackTrace();
 		    }
 
 		}
@@ -279,6 +289,7 @@ public class HTMLExtraction {
 			  } 
 			  catch (IOException e) 
 			  {
+				  System.out.println("Error in making xml file");
 				  e.printStackTrace();
 			  }
 		}
