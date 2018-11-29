@@ -31,7 +31,7 @@ public class HTMLExtraction {
     private final String username = "TextCorpusProgram";
     private final String password = "Pa$$word!";
     private final String connectionUrl = "jdbc:sqlserver://";
-    private final String serverName = "192.168.1.57\\NGL4";
+    private final String serverName = "68.1.83.163\\NGL4";
     private final String databaseName = "TextCorpusData";
 
 	
