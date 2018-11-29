@@ -109,6 +109,7 @@ public class CrawlerApp {
 					  {
 						  extractor.extract(link, pKey.incrementAndGet());
 					  }
+					  pKey.getAndSet(0);
 				  }
 				  catch (NumberFormatException f)
 				  {
@@ -121,10 +122,5 @@ public class CrawlerApp {
 			  }
 		  }
 		});
-	}
-
-	public int getNextpKey()
-	{
-		return pKey.incrementAndGet();
 	}
 }

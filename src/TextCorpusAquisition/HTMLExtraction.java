@@ -32,12 +32,14 @@ public class HTMLExtraction {
     private final String password = "Pa$$word!";
     private final String connectionUrl = "jdbc:sqlserver://";
     private final String serverName = "68.1.83.163\\NGL4";
+    private final String portNumber = "51487";
     private final String databaseName = "TextCorpusData";
 
 	
 		public HTMLExtraction(String searchTerm)
 		{
 			this.setSearchTerm(searchTerm);
+			this.deleteOldSql();
 		}
 		
 				//Connect to web page and extract HTML
@@ -230,7 +232,7 @@ public class HTMLExtraction {
 		
 		private String getConnectionUrl()
 		{
-			return connectionUrl + serverName + ";DatabaseName=" + databaseName;
+			return connectionUrl + serverName + ":" + portNumber + ";DatabaseName=" + databaseName;
 		}
 		
 		public void SqlTest()
@@ -292,5 +294,26 @@ public class HTMLExtraction {
 				  System.out.println("Error in making xml file");
 				  e.printStackTrace();
 			  }
+		}
+		
+		public void deleteOldSql()
+		{
+			try
+		    {
+		    	Connection conn = DriverManager.getConnection(getConnectionUrl(), username, password);
+		    	Statement st = conn.createStatement();
+		    	st.execute("DELETE FROM [TextCorpusData].[PageMetadata]");
+		    	st.execute("DELETE FROM [TextCorpusData].[WordsExtracted]");
+		    	st.execute("DELETE FROM [TextCorpusData].[WebPageInfo]");
+		    }
+			catch (SQLException e) 
+		    {
+		        System.out.println("Error in connecting to the Sql Server");
+		        e.printStackTrace();
+		    }
+		    catch(Exception e)
+		    {
+		    	e.printStackTrace();
+		    }
 		}
 	}
