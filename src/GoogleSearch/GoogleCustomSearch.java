@@ -1,29 +1,19 @@
 package GoogleSearch;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.util.*;
 import java.util.ArrayList;
-
-import org.jsoup.nodes.Element;
-
-
-
-import TextCorpusAquisition.HTMLExtraction;
 
 public class GoogleCustomSearch {
 
-	public ArrayList<String> search(String term) {
+	public ArrayList<String> search(String term, int amount) {
 		String query = term;
 		
 		ArrayList<String> links =new ArrayList<String>();
-		int searchNum = 20;
+		int searchNum = amount;
 		final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
 		try {
 			  

@@ -3,29 +3,31 @@ package WindowsApp;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import TextCorpusAquisition.HTMLExtraction;
 import GoogleSearch.GoogleCustomSearch;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class CrawlerApp {
 
 	private JFrame frame;
-	
+	private static AtomicInteger pKey = new AtomicInteger(0);
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		ArrayList<String> links =new ArrayList<String>();
+			//Random stuff for testing purposes
+		//ArrayList<String> links = new ArrayList<String>();
 		//HTMLExtraction x = new HTMLExtraction();
-		GoogleCustomSearch y = new GoogleCustomSearch();
-		links = y.search("freedom as a concept");
+		//x.extract("https://en.wikipedia.org/wiki/Paul_Revere");
+		//GoogleCustomSearch y = new GoogleCustomSearch();
+		//links = y.search("freedom as a concept", 1);
 		//x.extractMetaList(links);
-	    System.out.println(Arrays.toString(links.toArray()));
+	    //System.out.println(Arrays.toString(links.toArray()));
 	    //x.getMetaData("https://en.wikipedia.org/wiki/Paul_Revere");
 		//x.extractList(links);
 		EventQueue.invokeLater(new Runnable() {
@@ -90,10 +92,23 @@ public class CrawlerApp {
 			  {
 				  try
 				  {
+					  	// This is ran to make the error of the search amount sooner than later in the code
 					  Integer.parseInt(searchAmount.getText());
-					  //GoogleCustomSearch crawl = new GoogleCustomSearch();
-					  //crawl.search(searchTerm.getText());
-					  System.out.println(searchAmount.getText());
+					  
+					  ArrayList<String> links = new ArrayList<String>();
+					  
+					  	// This section generates the list of links
+					  GoogleCustomSearch crawler = new GoogleCustomSearch();
+					  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
+					  System.out.println(Arrays.toString(links.toArray()));
+
+					  	// This section of code uses the list of links to extract the html and xml
+					  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
+					  for (String link : links)
+					  {
+						  extractor.extract(link, pKey.incrementAndGet());
+					  }
+					  pKey.getAndSet(0);
 				  }
 				  catch (NumberFormatException f)
 				  {
@@ -107,5 +122,4 @@ public class CrawlerApp {
 		  }
 		});
 	}
-
 }

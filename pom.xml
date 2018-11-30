@@ -4,12 +4,6 @@
   <artifactId>TextCorpusAcquisition</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 <dependencies>
-<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
-<dependency>
-    <groupId>org.apache.tika</groupId>
-    <artifactId>tika-core</artifactId>
-    <version>1.19.1</version>
-</dependency>
 <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 <dependency>
     <groupId>org.jsoup</groupId>
