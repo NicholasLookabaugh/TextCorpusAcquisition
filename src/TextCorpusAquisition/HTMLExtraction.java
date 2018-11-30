@@ -40,6 +40,11 @@ public class HTMLExtraction {
 		{
 			this.setSearchTerm(searchTerm);
 			this.deleteOldSql();
+			try {
+				FileUtils.deleteDirectory(new File("Crawl Results"));
+			} catch (IOException e) {
+				System.out.println("Directory not there");
+			}
 		}
 		
 				//Connect to web page and extract HTML
