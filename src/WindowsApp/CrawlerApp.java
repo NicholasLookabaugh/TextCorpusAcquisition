@@ -20,12 +20,12 @@ public class CrawlerApp {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		ArrayList<String> links =new ArrayList<String>();
+		//ArrayList<String> links =new ArrayList<String>();
 		//HTMLExtraction x = new HTMLExtraction();
-		GoogleCustomSearch y = new GoogleCustomSearch();
-		links = y.search("freedom as a concept");
+		//GoogleCustomSearch y = new GoogleCustomSearch();
+		//links = y.search("freedom as a concept");
 		//x.extractMetaList(links);
-	    System.out.println(Arrays.toString(links.toArray()));
+	    //System.out.println(Arrays.toString(links.toArray()));
 	    //x.getMetaData("https://en.wikipedia.org/wiki/Paul_Revere");
 		//x.extractList(links);
 		EventQueue.invokeLater(new Runnable() {
@@ -107,5 +107,4 @@ public class CrawlerApp {
 		  }
 		});
 	}
-
 }
