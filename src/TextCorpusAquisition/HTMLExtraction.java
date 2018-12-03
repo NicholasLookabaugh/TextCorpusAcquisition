@@ -83,10 +83,10 @@ public class HTMLExtraction {
 		}
 		
 		
-		public void extract(String url1, int pKey) {
+		public void extract(String url, int pKey) {
 			try {
 			//URL to test 
-		      setUrl(url1);
+		      setUrl(url);
 		      setPKey(pKey);
 		      
 		      		// Date and time of connection
@@ -99,27 +99,10 @@ public class HTMLExtraction {
 		      		//web page title
 		      title =  htmlDoc.title();
 		      setTitle(title);
-	
-		      		//get html body and cleaned body
-		      Element body = htmlDoc.body();
-		      Elements paragraphs = setBody(body);
-		      setParagraph(paragraphs);
-		      		//print cleaned body text
-		      for (Element paragraph : paragraphs) {
-		         System.out.println(paragraph.text());
-		      }
 		      
-		      Pattern patt = Pattern.compile("[a-zA-Z]+");
-		      Matcher match = patt.matcher(paragraphs.text().toString());
-		      wordCount = 0;
-		      while(match.find())
-		      {
-		    	  wordCount++;
-		      }
-		      setWordCount(wordCount);
 		      extractHtml();
 		      extractText();
-		      getMetaData(url1);
+		      getMetaData(url);
 		      SqlTest();
 			}
 			catch(Exception e) {
@@ -133,19 +116,51 @@ public class HTMLExtraction {
 			//Extracting the HTML
 			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".html");
 			      
-			  try 
-			  {
-				  FileUtils.writeStringToFile(f, htmlDoc.outerHtml());
-			  } 
-			  catch (IOException e) 
-			  {
-				  e.printStackTrace();
-			  }
+			try 
+			{
+				FileUtils.writeStringToFile(f, htmlDoc.outerHtml());
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		public void extractText() 
 		{
+				//Extracting the text
+			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".txt");
+			String output = "";
 			
+				//get html body and cleaned body
+			Element body = htmlDoc.body();
+			Elements paragraphs = setBody(body);
+			setParagraph(paragraphs);
+			
+				//add cleaned body text to output
+			for (Element paragraph : paragraphs) 
+			{
+				output += paragraph.text();
+			}
+			
+				//get word count
+			Pattern patt = Pattern.compile("[a-zA-Z]+");
+			Matcher match = patt.matcher(paragraphs.text().toString());
+			wordCount = 0;
+			while(match.find())
+			{
+				wordCount++;
+			}
+			setWordCount(wordCount);
+		      
+			try 
+			{
+				FileUtils.writeStringToFile(f, output);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		public void setHTMLDoc(Document htmlDoc)
