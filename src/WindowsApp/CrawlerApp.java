@@ -39,7 +39,7 @@ public class CrawlerApp {
 					e.printStackTrace();
 				}
 			}
-
+			
 		});
 	}
 
@@ -58,21 +58,21 @@ public class CrawlerApp {
 		frame.setSize(750, 225);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
-
+		
 		JButton crawlButton = new JButton("Crawl");
 		crawlButton.setBounds(25, 75, 100, 50);
-
+		
 		JTextField searchTerm = new JTextField();
 		searchTerm.setBounds(150, 75, 300, 50);
-
+		
 		JTextField searchAmount = new JTextField();
 		searchAmount.setBounds(500, 75, 150, 50);
-
+		
 		JTextField searchText = new JTextField("Enter your search term");
 		searchText.setBounds(225, 25, 150, 50);
 		searchText.setEditable(false);
 		searchText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-
+		
 		JTextField amountText = new JTextField("Enter the search length");
 		amountText.setBounds(512, 25, 150, 50);
 		amountText.setEditable(false);
@@ -83,7 +83,7 @@ public class CrawlerApp {
 		frame.add(crawlButton);
 		frame.add(searchTerm);
 		frame.add(searchAmount);
-
+		
 		crawlButton.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -93,22 +93,28 @@ public class CrawlerApp {
 				  try
 				  {
 					  	// This is ran to make the error of the search amount sooner than later in the code
-					  Integer.parseInt(searchAmount.getText());
-
-					  ArrayList<String> links = new ArrayList<String>();
-
-					  	// This section generates the list of links
-					  GoogleCustomSearch crawler = new GoogleCustomSearch();
-					  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
-					  System.out.println(Arrays.toString(links.toArray()));
-
-					  	// This section of code uses the list of links to extract the html and xml
-					  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
-					  for (String link : links)
+					  int amount = Integer.parseInt(searchAmount.getText());
+					  if(amount < 1)
 					  {
-						  extractor.extract(link, pKey.incrementAndGet());
+						  JOptionPane.showMessageDialog(frame, "A number greater than zero must be inputted in the search length field.", "Error", JOptionPane.ERROR_MESSAGE);
 					  }
-					  pKey.getAndSet(0);
+					  else
+					  {
+						  ArrayList<String> links = new ArrayList<String>();
+					  
+						  	// This section generates the list of links
+						  GoogleCustomSearch crawler = new GoogleCustomSearch();
+						  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
+						  System.out.println(Arrays.toString(links.toArray()));
+
+						  	// This section of code uses the list of links to extract the html and xml
+						  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
+						  for (String link : links)
+						  {
+							  extractor.extract(link, pKey.incrementAndGet());
+						  }
+						  pKey.getAndSet(0);
+					  }
 				  }
 				  catch (NumberFormatException f)
 				  {
