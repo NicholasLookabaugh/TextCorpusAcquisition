@@ -111,9 +111,14 @@ public class CrawlerApp {
 						  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
 						  for (String link : links)
 						  {
+							  System.out.println("Extraction Done!!!!");
+							  
 							  extractor.extract(link, pKey.incrementAndGet());
+							  
+		
 						  }
 						  pKey.getAndSet(0);
+						  
 					  }
 				  }
 				  catch (NumberFormatException f)

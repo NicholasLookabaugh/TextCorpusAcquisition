@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class GoogleCustomSearch {
 
 	public ArrayList<String> search(String term, int amount) {
-		String query = term;
+		String query = term; //+ " -.pdf -.pptx -.ppt - .pps"; change to filetype
 		
 		ArrayList<String> links =new ArrayList<String>();
 		int searchNum = amount;

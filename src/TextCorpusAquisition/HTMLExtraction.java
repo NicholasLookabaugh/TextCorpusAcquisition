@@ -13,9 +13,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class HTMLExtraction {
 	
@@ -27,6 +29,7 @@ public class HTMLExtraction {
 	private int wordCount;
 	private String dateTime;
 	private int pKey;
+	private String Xml;
 	
     private final String username = "TextCorpusProgram";
     private final String password = "Pa$$word!";
@@ -34,6 +37,8 @@ public class HTMLExtraction {
     private final String serverName = "68.1.83.163\\NGL4";
     private final String portNumber = "51487";
     private final String databaseName = "TextCorpusData";
+    
+    
 
 	
 		public HTMLExtraction(String searchTerm)
@@ -100,10 +105,16 @@ public class HTMLExtraction {
 		      title =  htmlDoc.title();
 		      setTitle(title);
 		      
+		      System.out.println("Showed up in extraction method!!!!");
 		      extractHtml();
 		      extractText();
 		      getMetaData(url);
+		      
+		      System.out.println("Starting SQL Test!!!!");
 		      SqlTest();
+		      
+		      
+		      
 			}
 			catch(Exception e) {
 				System.out.println("Extraction Error");
@@ -250,6 +261,17 @@ public class HTMLExtraction {
 			return this.pKey;
 		}
 		
+		
+		public void setXml(String Xml){
+			
+			this.Xml = Xml;
+		}
+		
+		public String getXml(){
+			
+			return Xml;
+		}
+		
 		private String getConnectionUrl()
 		{
 			return connectionUrl + serverName + ":" + portNumber + ";DatabaseName=" + databaseName;
@@ -261,13 +283,13 @@ public class HTMLExtraction {
 		    {
 		    	Connection conn = DriverManager.getConnection(getConnectionUrl(), username, password);
 		    	Statement st = conn.createStatement();
-		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', '" + getTitle() + "', '" + getDateTime() + "', " + getWordCount() + ");");
+		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', N'" + getTitle().replace("\'", "\'\'") + "', '" + getDateTime() + "', " + getWordCount() + ");");
 		        st.executeUpdate(SQL_WebPageInfo);
 
     			//Fix the closing ' for SQL insert
 		    	String htmlFix = getHTMLDoc().toString().replace("\'", "\'\'");
-
-		        String SQL_PageMetaData = ("INSERT INTO [TextCorpusData].[PageMetadata] (WebPage_ID, Page_HTML) VALUES (" + pKey + ", N'" + htmlFix + "');"); 
+		    	
+		        String SQL_PageMetaData = ("INSERT INTO [TextCorpusData].[PageMetadata] VALUES (" + pKey + ", N'" + htmlFix + "', N'" + getXml().replace("\'", "\'\'") + "');"); 
 		        st.executeUpdate(SQL_PageMetaData);
 
 				Pattern patt = Pattern.compile("[a-zA-Z]+");
@@ -278,6 +300,9 @@ public class HTMLExtraction {
 		            String SQL_WordsExtracted = ("INSERT INTO [TextCorpusData].[WordsExtracted] VALUES (" + pKey + ", '" + match.group() + "');"); 
 			        st.executeUpdate(SQL_WordsExtracted);
 				}
+				
+				
+				System.out.println("SQL Statement Completed!!!");
 		    }
 		    // Handle any errors that may have occurred.
 		    catch (SQLException e) 
@@ -302,6 +327,8 @@ public class HTMLExtraction {
 			exportXml += " <SearchTerm>" + searchTerm + "</SearchTerm>\n";
 			exportXml += "</Website>";
 			
+			 setXml(exportXml); 	
+			 
 				// Writes to a xml file named the same as the pKey
 			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".xml");
 		      
@@ -314,7 +341,11 @@ public class HTMLExtraction {
 				  System.out.println("Error in making xml file");
 				  e.printStackTrace();
 			  }
+		  
+					  
 		}
+		
+		
 		
 		public void deleteOldSql()
 		{
