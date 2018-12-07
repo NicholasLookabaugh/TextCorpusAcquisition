@@ -53,7 +53,9 @@ public class CrawlerApp {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+
 	private void initialize() {
+		
 		frame = new JFrame("Text Corpus Acquisition");
 		frame.setSize(750, 225);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,6 +122,7 @@ public class CrawlerApp {
 						  pKey.getAndSet(0);
 						  
 					  }
+					  
 				  }
 				  catch (NumberFormatException f)
 				  {
@@ -131,6 +134,10 @@ public class CrawlerApp {
 				  JOptionPane.showMessageDialog(frame, "The search term field cannot be left empty.", "Error", JOptionPane.ERROR_MESSAGE);
 			  }
 		  }
+		  
 		});
+		
+			
+		}
 	}
-}
+

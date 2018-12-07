@@ -69,9 +69,12 @@ public class HTMLExtraction {
 			try {
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0").get();
 				String title = doc.title();
+				setTitle(title);
 	            String timeAccessed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 	            String link = url;
+	            setUrl(link);
 	            String searchTerm = this.getSearchTerm();
+	            setSearchTerm(searchTerm);
 	            this.makeXml(title, timeAccessed, link, searchTerm);
 				//for(Element meta : doc.select("meta")) {
 					//System.out.println("Name: " + meta.attr("name") + " - Content: " + meta.attr("content"));
