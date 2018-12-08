@@ -45,11 +45,7 @@ public class HTMLExtraction {
 		{
 			this.setSearchTerm(searchTerm);
 			this.deleteOldSql();
-			try {
-				FileUtils.deleteDirectory(new File("Crawl Results"));
-			} catch (IOException e) {
-				System.out.println("Directory not there");
-			}
+			this.deleteOldFiles();
 		}
 		
 				//Connect to web page and extract HTML
@@ -63,58 +59,31 @@ public class HTMLExtraction {
 			
 			return htmlDoc;
 		}
-		
-		public void getMetaData(String url1) {
-			String url = url1;  
-			try {
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0").get();
-				String title = doc.title();
-				setTitle(title);
-	            String timeAccessed = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-	            String link = url;
-	            setUrl(link);
-	            String searchTerm = this.getSearchTerm();
-	            setSearchTerm(searchTerm);
-	            this.makeXml(title, timeAccessed, link, searchTerm);
-				//for(Element meta : doc.select("meta")) {
-					//System.out.println("Name: " + meta.attr("name") + " - Content: " + meta.attr("content"));
-				//}
-			}
-			catch(Exception e) {
-				System.out.println("Error");
-			}
-		}
-		public void extractMetaList(ArrayList<String> list) {
-			for (int counter = 0; counter < list.size(); counter++) { 		      
-		          getMetaData(list.get(counter)); 		
-		      } 
-		}
-		
-		
+			
+			// This sets all the objects for the website and uses it for the extraction of the raw HTML, extracted text, and metadata XML
 		public void extract(String url, int pKey) {
 			try {
-			//URL to test 
-		      setUrl(url);
-		      setPKey(pKey);
+					//URL to test 
+		      this.setUrl(url);
+		      this.setPKey(pKey);
 		      
 		      		// Date and time of connection
 		      String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		      setDateTime(dateTime);
+		      this.setDateTime(dateTime);
+		      
 		      		//Document with HTML
 		      Document htmlDoc = Jsoup.connect(url).userAgent("Mozilla").timeout(0).get();
-
-		      setHTMLDoc(htmlDoc);
+		      this.setHTMLDoc(htmlDoc);
+		      
 		      		//web page title
 		      title =  htmlDoc.title();
-		      setTitle(title);
+		      this.setTitle(title);
 		      
-		      System.out.println("Showed up in extraction method!!!!");
-		      extractHtml();
-		      extractText();
-		      getMetaData(url);
-		      
-		      System.out.println("Starting SQL Test!!!!");
-		      SqlTest();
+		      this.extractHtml();
+		      this.extractText();
+		      this.setXml();
+		      this.exportXml();
+		      this.importIntoDatabase();
 		      
 		      
 		      
@@ -124,7 +93,8 @@ public class HTMLExtraction {
 			}
 
 		}
-		
+			
+			// Extracts the raw HTML from the web source and exports it into your file system
 		public void extractHtml()
 		{
 			//Extracting the HTML
@@ -140,6 +110,7 @@ public class HTMLExtraction {
 			}
 		}
 		
+			// Extracts the text from the web source and exports it into your file system
 		public void extractText() 
 		{
 				//Extracting the text
@@ -264,12 +235,6 @@ public class HTMLExtraction {
 			return this.pKey;
 		}
 		
-		
-		public void setXml(String Xml){
-			
-			this.Xml = Xml;
-		}
-		
 		public String getXml(){
 			
 			return Xml;
@@ -280,7 +245,8 @@ public class HTMLExtraction {
 			return connectionUrl + serverName + ":" + portNumber + ";DatabaseName=" + databaseName;
 		}
 		
-		public void SqlTest()
+			// Imports all the necessary data into the database with the associated information
+		public void importIntoDatabase()
 		{
 		    try
 		    {
@@ -320,36 +286,50 @@ public class HTMLExtraction {
 
 		}
 		
-		public void makeXml(String title, String timeAccessed, String link, String searchTerm)
+			// Sets up the basic XML string with the according information
+		public void setXml()
 		{
 			String exportXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 			exportXml += "<Website>\n";
-			exportXml += " <Title>" + title + "</Title>\n";
-			exportXml += " <TimeAccessed>" + timeAccessed + "</TimeAccessed>\n";
-			exportXml += " <Link>" + link + "</Link>\n";
-			exportXml += " <SearchTerm>" + searchTerm + "</SearchTerm>\n";
+			exportXml += " <Title>" + this.getTitle() + "</Title>\n";
+			exportXml += " <TimeAccessed>" + this.getDateTime() + "</TimeAccessed>\n";
+			exportXml += " <Link>" + this.getUrl() + "</Link>\n";
+			exportXml += " <SearchTerm>" + this.getSearchTerm() + "</SearchTerm>\n";
 			exportXml += "</Website>";
 			
-			 setXml(exportXml); 	
-			 
-				// Writes to a xml file named the same as the pKey
-			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".xml");
-		      
-			  try 
-			  {
-				  FileUtils.writeStringToFile(f, exportXml);
-			  } 
-			  catch (IOException e) 
-			  {
-				  System.out.println("Error in making xml file");
-				  e.printStackTrace();
-			  }
-		  
-					  
+			this.Xml = exportXml;
 		}
 		
+			// Exports the metadata XML into your system's file system
+		public void exportXml()
+		{
+			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".xml");
+		      
+			try 
+			{
+				FileUtils.writeStringToFile(f, this.getXml());
+			} 
+			catch (IOException e) 
+			{
+				System.out.println("Error in making xml file");
+				e.printStackTrace();
+			}
+		}
 		
+			// Deletes old files from your system such as the raw HTML, extracted text, and metadata XML
+		public void deleteOldFiles()
+		{
+			try 
+			{
+				FileUtils.deleteDirectory(new File("Crawl Results"));
+			} 
+			catch (IOException e) 
+			{
+				System.out.println("Directory not there");
+			}
+		}
 		
+			// Deletes old crawls from the database
 		public void deleteOldSql()
 		{
 			try
