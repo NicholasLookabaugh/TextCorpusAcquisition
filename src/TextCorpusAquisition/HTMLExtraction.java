@@ -59,39 +59,39 @@ public class HTMLExtraction {
 			
 			return htmlDoc;
 		}
-			
-			// This sets all the objects for the website and uses it for the extraction of the raw HTML, extracted text, and metadata XML
-		public void extract(String url, int pKey) {
-			try {
-					//URL to test 
-		      this.setUrl(url);
-		      this.setPKey(pKey);
-		      
-		      		// Date and time of connection
-		      String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		      this.setDateTime(dateTime);
-		      
-		      		//Document with HTML
-		      Document htmlDoc = Jsoup.connect(url).userAgent("Mozilla").timeout(0).get();
-		      this.setHTMLDoc(htmlDoc);
-		      
-		      		//web page title
-		      title =  htmlDoc.title();
-		      this.setTitle(title);
-		      
-		      this.extractHtml();
-		      this.extractText();
-		      this.setXml();
-		      this.exportXml();
-		      this.importIntoDatabase();
-		      
-		      
-		      
+		
+		public void setInformation(String url, int pKey)
+		{
+			this.setUrl(url);
+		    this.setPKey(pKey);
+		    	// Date and time of connection
+		    this.setDateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
+		    try
+		    {
+		    		//Document with HTML
+		    	this.setHTMLDoc(Jsoup.connect(url).userAgent("Mozilla").timeout(0).get());
+		    		//web page title
+		    	this.setTitle(htmlDoc.title());
+	      			// Sets the metadata XML with the necessary information
+		    	this.setXml();
 			}
 			catch(Exception e) {
 				System.out.println("Extraction Error");
 			}
-
+		}
+			
+			// This sets all the objects for the website and uses it for the extraction of the raw HTML, extracted text, and metadata XML
+		public void extract(String url, int pKey) {
+					// Sets the necessary information
+			  this.setInformation(url, pKey);
+			  		// Extracts the raw HTML
+		      this.extractHtml();
+		      		// Extracts the extracted text
+		      this.extractText();
+		      		// Exports the metadata XML into your file system
+		      this.exportXml();
+		      		// Imports all the information of the website into the database
+		      this.importIntoDatabase();
 		}
 			
 			// Extracts the raw HTML from the web source and exports it into your file system

@@ -9,7 +9,7 @@ public class HTMLExtractionTests {
 	@Test
 	public void testofMetaData() {
 		HTMLExtraction x = new HTMLExtraction("Test");
-		x.getMetaData("http://www.karelia.com/support/sandvox/help/z/Site_Title.html");
+		x.setInformation("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", 0);
 		assertEquals("Site Title", x.getTitle());
 		assertEquals("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", x.getUrl());
 		assertEquals("Test", x.getSearchTerm());
