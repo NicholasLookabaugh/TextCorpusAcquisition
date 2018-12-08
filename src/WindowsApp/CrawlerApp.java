@@ -117,6 +117,7 @@ public class CrawlerApp {
 						  }
 						  pKey.getAndSet(0);
 						  
+						  JOptionPane.showMessageDialog(frame, "Crawl Complete.", "Finished", JOptionPane.INFORMATION_MESSAGE);
 					  }
 					  
 				  }
