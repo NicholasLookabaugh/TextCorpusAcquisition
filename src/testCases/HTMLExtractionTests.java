@@ -2,34 +2,21 @@ package testCases;
 import TextCorpusAquisition.HTMLExtraction;
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 
-public class HTMLExtractionTests {
-
+public class HTMLExtractionTests 
+{
 	@Test
-	public void testofMetaData() {
-		HTMLExtraction x = new HTMLExtraction("Test");
-		x.setInformation("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", 0);
-		assertEquals("Site Title", x.getTitle());
-		assertEquals("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", x.getUrl());
-		assertEquals("Test", x.getSearchTerm());
-	}
-
-	@Test
-	public void testofExtraction() {
+	public void testofExtraction() 
+	{
 		HTMLExtraction x = new HTMLExtraction("Test");
 		x.extract("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", 1);
 		assertEquals("Site Title", x.getTitle());
+		assertEquals("http://www.karelia.com/support/sandvox/help/z/Site_Title.html", x.getUrl());
 		//assertEquals( "", (x.getParagraph()).substring(0, 8));
 		assertEquals("Test", x.getSearchTerm());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

@@ -19,7 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class HTMLExtraction {
+public class HTMLExtraction 
+{
 	
 	private String url;
 	private String title;
@@ -31,6 +32,7 @@ public class HTMLExtraction {
 	private int pKey;
 	private String Xml;
 	
+		// Database information
     private final String username = "TextCorpusProgram";
     private final String password = "Pa$$word!";
     private final String connectionUrl = "jdbc:sqlserver://";
@@ -38,9 +40,6 @@ public class HTMLExtraction {
     private final String portNumber = "51487";
     private final String databaseName = "TextCorpusData";
     
-    
-
-	
 		public HTMLExtraction(String searchTerm)
 		{
 			this.setSearchTerm(searchTerm);
@@ -48,19 +47,7 @@ public class HTMLExtraction {
 			this.deleteOldFiles();
 		}
 		
-				//Connect to web page and extract HTML
-		public Document establishConnection(String url){
-			
-			try {
-				htmlDoc = Jsoup.connect(url).get();
-			} catch (IOException e) {
-				System.out.println("Connection Error");
-			}
-			
-			return htmlDoc;
-		}
-		
-		public void setInformation(String url, int pKey)
+		private void setInformation(String url, int pKey)
 		{
 			this.setUrl(url);
 		    this.setPKey(pKey);
@@ -95,7 +82,7 @@ public class HTMLExtraction {
 		}
 			
 			// Extracts the raw HTML from the web source and exports it into your file system
-		public void extractHtml()
+		private void extractHtml()
 		{
 			//Extracting the HTML
 			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".html");
@@ -111,7 +98,7 @@ public class HTMLExtraction {
 		}
 		
 			// Extracts the text from the web source and exports it into your file system
-		public void extractText() 
+		private void extractText() 
 		{
 				//Extracting the text
 			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".txt");
@@ -235,30 +222,43 @@ public class HTMLExtraction {
 			return this.pKey;
 		}
 		
+			// Sets up the basic XML string with the according information
+		public void setXml()
+		{
+			String exportXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			exportXml += "<Website>\n";
+			exportXml += " <Title>" + this.getTitle() + "</Title>\n";
+			exportXml += " <TimeAccessed>" + this.getDateTime() + "</TimeAccessed>\n";
+			exportXml += " <Link>" + this.getUrl() + "</Link>\n";
+			exportXml += " <SearchTerm>" + this.getSearchTerm() + "</SearchTerm>\n";
+			exportXml += "</Website>";
+			this.Xml = exportXml;
+		}
+		
 		public String getXml(){
 			
 			return Xml;
 		}
 		
-		private String getConnectionUrl()
+		public String getConnectionUrl()
 		{
 			return connectionUrl + serverName + ":" + portNumber + ";DatabaseName=" + databaseName;
 		}
 		
 			// Imports all the necessary data into the database with the associated information
-		public void importIntoDatabase()
+		private void importIntoDatabase()
 		{
 		    try
 		    {
 		    	Connection conn = DriverManager.getConnection(getConnectionUrl(), username, password);
 		    	Statement st = conn.createStatement();
-		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + pKey + ", '" + getSearchTerm() + "', '" + getUrl() + "', N'" + getTitle().replace("\'", "\'\'") + "', '" + getDateTime() + "', " + getWordCount() + ");");
+		    	String SQL_WebPageInfo = ("INSERT INTO [TextCorpusData].[WebPageInfo] VALUES(" + this.getPKey() + ", '" + this.getSearchTerm() + "', '" + this.getUrl() + "', N'" + this.getTitle().replace("\'", "\'\'") + "', '" + this.getDateTime() + "', " + this.getWordCount() + ");");
 		        st.executeUpdate(SQL_WebPageInfo);
 
     			//Fix the closing ' for SQL insert
 		    	String htmlFix = getHTMLDoc().toString().replace("\'", "\'\'");
 		    	
-		        String SQL_PageMetaData = ("INSERT INTO [TextCorpusData].[PageMetadata] VALUES (" + pKey + ", N'" + htmlFix + "', N'" + getXml().replace("\'", "\'\'") + "');"); 
+		        String SQL_PageMetaData = ("INSERT INTO [TextCorpusData].[PageMetadata] VALUES (" + this.getPKey() + ", N'" + htmlFix + "', N'" + this.getXml().replace("\'", "\'\'") + "');"); 
 		        st.executeUpdate(SQL_PageMetaData);
 
 				Pattern patt = Pattern.compile("[a-zA-Z]+");
@@ -266,12 +266,9 @@ public class HTMLExtraction {
 
 				while (match.find()) 
 				{ 
-		            String SQL_WordsExtracted = ("INSERT INTO [TextCorpusData].[WordsExtracted] VALUES (" + pKey + ", '" + match.group() + "');"); 
+		            String SQL_WordsExtracted = ("INSERT INTO [TextCorpusData].[WordsExtracted] VALUES (" + this.getPKey() + ", '" + match.group() + "');"); 
 			        st.executeUpdate(SQL_WordsExtracted);
 				}
-				
-				
-				System.out.println("SQL Statement Completed!!!");
 		    }
 		    // Handle any errors that may have occurred.
 		    catch (SQLException e) 
@@ -286,22 +283,8 @@ public class HTMLExtraction {
 
 		}
 		
-			// Sets up the basic XML string with the according information
-		public void setXml()
-		{
-			String exportXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			exportXml += "<Website>\n";
-			exportXml += " <Title>" + this.getTitle() + "</Title>\n";
-			exportXml += " <TimeAccessed>" + this.getDateTime() + "</TimeAccessed>\n";
-			exportXml += " <Link>" + this.getUrl() + "</Link>\n";
-			exportXml += " <SearchTerm>" + this.getSearchTerm() + "</SearchTerm>\n";
-			exportXml += "</Website>";
-			
-			this.Xml = exportXml;
-		}
-		
 			// Exports the metadata XML into your system's file system
-		public void exportXml()
+		private void exportXml()
 		{
 			final File f = new File("Crawl Results/" + searchTerm + "/" + pKey + "/" + pKey + ".xml");
 		      
@@ -317,7 +300,7 @@ public class HTMLExtraction {
 		}
 		
 			// Deletes old files from your system such as the raw HTML, extracted text, and metadata XML
-		public void deleteOldFiles()
+		private void deleteOldFiles()
 		{
 			try 
 			{
@@ -330,7 +313,7 @@ public class HTMLExtraction {
 		}
 		
 			// Deletes old crawls from the database
-		public void deleteOldSql()
+		private void deleteOldSql()
 		{
 			try
 		    {

@@ -109,15 +109,11 @@ public class CrawlerApp {
 						  links = crawler.search(searchTerm.getText(), Integer.parseInt(searchAmount.getText()));
 						  System.out.println(Arrays.toString(links.toArray()));
 
-						  	// This section of code uses the list of links to extract the html and xml
+						  	// This section of code uses the list of links to extract the raw html, text, and xml
 						  HTMLExtraction extractor = new HTMLExtraction(searchTerm.getText());
 						  for (String link : links)
 						  {
-							  System.out.println("Extraction Done!!!!");
-							  
 							  extractor.extract(link, pKey.incrementAndGet());
-							  
-		
 						  }
 						  pKey.getAndSet(0);
 						  

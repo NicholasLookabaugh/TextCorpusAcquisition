@@ -7,10 +7,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
-public class GoogleCustomSearch {
-
+public class GoogleCustomSearch 
+{
 	public ArrayList<String> search(String term, int amount) {
-		String query = term; //+ " -.pdf -.pptx -.ppt - .pps"; change to filetype
+		String query = term + " -filetype:pdf -filetype:pptx -filetype:ppt -filetype:pps -filetype:doc -filetype:docx";
 		
 		ArrayList<String> links =new ArrayList<String>();
 		int searchNum = amount;
