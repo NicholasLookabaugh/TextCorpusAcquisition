@@ -1,10 +1,6 @@
 package testCases;
 import TextCorpusAquisition.HTMLExtraction;
 import static org.junit.Assert.*;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 
 public class HTMLExtractionTests 
